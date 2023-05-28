@@ -1,6 +1,13 @@
 ## 📨Notify Service
 ### Information general:
-- `not` require volume mounted on Docker
+> Note: `not` require volume mounted on Docker
+
+### Dependencies
+| Services | Required |
+| ------ | ------ |
+| Api | ✅  |
+| RabbitMQ | ✅  |
+
 ```sh
 example:
     #--- rabbit ---
