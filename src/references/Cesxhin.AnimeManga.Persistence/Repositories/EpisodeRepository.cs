@@ -155,7 +155,7 @@ namespace Cesxhin.AnimeManga.Persistence.Repositories
                 try
                 {
 
-                    rs = await connection.UpdateAsync(episode, e => e.StateDownload == "failed" && e.ID == episode.ID);
+                    rs = await connection.UpdateAsync(episode, e => e.StateDownload != "completed" && e.ID == episode.ID);
 
                 }
                 catch (Exception ex)
@@ -179,13 +179,14 @@ namespace Cesxhin.AnimeManga.Persistence.Repositories
 
                 try
                 {
-                    episodes.ForEach((episode) =>
+                    var episodesUpdate = episodes.Where(e => e.StateDownload != "completed").ToList();
+                    episodesUpdate.ForEach((e) =>
                     {
-                        episode.PercentualDownload = 0;
-                        episode.StateDownload = null;
+                        e.PercentualDownload = 0;
+                        e.StateDownload = null;
                     });
 
-                    rs = await connection.UpdateAllAsync(episodes, e => e.StateDownload == "failed");
+                    rs = await connection.UpdateAllAsync(episodesUpdate);
                 }
                 catch (Exception ex)
                 {
