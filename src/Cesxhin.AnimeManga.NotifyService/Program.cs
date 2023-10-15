@@ -67,32 +67,32 @@ namespace Cesxhin.AnimeManga.NotifyService
 
                             if (selectService == "discord" || selectService == "any")
                             {
-                                cfg.ReceiveEndpoint("notify-video", e => {
+                                cfg.ReceiveEndpoint("notify-video-discord", e => {
                                     e.Consumer<NotifyVideoConsumer>();
                                 });
-                                cfg.ReceiveEndpoint("notify-book", e => {
+                                cfg.ReceiveEndpoint("notify-book-discord", e => {
                                     e.Consumer<NotifyBookConsumer>();
                                 });
-                                cfg.ReceiveEndpoint("notify-request-video", e => {
+                                cfg.ReceiveEndpoint("notify-request-video-discord", e => {
                                     e.Consumer<NotifyRequestVideoConsumer>();
                                 });
-                                cfg.ReceiveEndpoint("notify-request-book", e => {
+                                cfg.ReceiveEndpoint("notify-request-book-discord", e => {
                                     e.Consumer<NotifyRequestBookConsumer>();
                                 });
                             }
 
                             if(selectService == "telegram" || selectService == "any")
                             {
-                                cfg.ReceiveEndpoint("notify-video", e => {
+                                cfg.ReceiveEndpoint("notify-video-telegram", e => {
                                     e.Consumer<NotifyVideoTelegramConsumer>();
                                 });
-                                cfg.ReceiveEndpoint("notify-book", e => {
+                                cfg.ReceiveEndpoint("notify-book-telegram", e => {
                                     e.Consumer<NotifyBookTelegramConsumer>();
                                 });
-                                cfg.ReceiveEndpoint("notify-request-video", e => {
+                                cfg.ReceiveEndpoint("notify-request-video-telegram", e => {
                                     e.Consumer<NotifyRequestVideoTelegramConsumer>();
                                 });
-                                cfg.ReceiveEndpoint("notify-request-book", e => {
+                                cfg.ReceiveEndpoint("notify-request-book-telegram", e => {
                                     e.Consumer<NotifyRequestBookTelegramConsumer>();
                                 });
                             }
