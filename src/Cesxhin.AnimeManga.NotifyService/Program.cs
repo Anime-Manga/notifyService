@@ -5,7 +5,6 @@ using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
-using Quartz;
 using System;
 
 namespace Cesxhin.AnimeManga.NotifyService
@@ -21,6 +20,36 @@ namespace Cesxhin.AnimeManga.NotifyService
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    var selectService = (Environment.GetEnvironmentVariable("SELECT_SERVICE") ?? "any").ToLower();
+
+                    //check envs
+                    if (selectService == "discord" || selectService == "any")
+                    {
+                        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBHOOK_DISCORD_BOOK")))
+                            throw new Exception("Missing env WEBHOOK_DISCORD_BOOK");
+
+                        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBHOOK_DISCORD_BOOK_REQUEST")))
+                            throw new Exception("Missing env WEBHOOK_DISCORD_BOOK_REQUEST");
+
+                        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBHOOK_DISCORD_VIDEO")))
+                            throw new Exception("Missing env WEBHOOK_DISCORD_VIDEO");
+
+                        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBHOOK_DISCORD_VIDEO_REQUEST")))
+                            throw new Exception("Missing env WEBHOOK_DISCORD_VIDEO_REQUEST");
+                    }
+
+                    if (selectService == "telegram" || selectService == "any")
+                    {
+                        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TOKEN_BOT")))
+                            throw new Exception("Missing env TOKEN_BOT");
+
+                        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHAT_ID")))
+                            throw new Exception("Missing env CHAT_ID");
+
+                        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHAT_ID_REQUEST")))
+                            throw new Exception("Missing env CHAT_ID_REQUEST");
+                    }
+
                     //rabbit
                     services.AddMassTransit(
                     x =>
@@ -35,28 +64,46 @@ namespace Cesxhin.AnimeManga.NotifyService
                                     credentials.Username(Environment.GetEnvironmentVariable("USERNAME_RABBIT") ?? "guest");
                                     credentials.Password(Environment.GetEnvironmentVariable("PASSWORD_RABBIT") ?? "guest");
                                 });
-                            cfg.ReceiveEndpoint("notify-anime", e => {
-                                e.Consumer<NotifyConsumer>();
-                            });
+
+                            if (selectService == "discord" || selectService == "any")
+                            {
+                                cfg.ReceiveEndpoint("notify-video", e => {
+                                    e.Consumer<NotifyVideoConsumer>();
+                                });
+                                cfg.ReceiveEndpoint("notify-book", e => {
+                                    e.Consumer<NotifyBookConsumer>();
+                                });
+                                cfg.ReceiveEndpoint("notify-request-video", e => {
+                                    e.Consumer<NotifyRequestVideoConsumer>();
+                                });
+                                cfg.ReceiveEndpoint("notify-request-book", e => {
+                                    e.Consumer<NotifyRequestBookConsumer>();
+                                });
+                            }
+
+                            if(selectService == "telegram" || selectService == "any")
+                            {
+                                cfg.ReceiveEndpoint("notify-video", e => {
+                                    e.Consumer<NotifyTelegramConsumer>();
+                                });
+                                cfg.ReceiveEndpoint("notify-book", e => {
+                                    e.Consumer<NotifyTelegramConsumer>();
+                                });
+                                cfg.ReceiveEndpoint("notify-request-video", e => {
+                                    e.Consumer<NotifyRequestTelegramConsumer>();
+                                });
+                                cfg.ReceiveEndpoint("notify-request-book", e => {
+                                    e.Consumer<NotifyRequestTelegramConsumer>();
+                                });
+                            }
 
                         });
                     });
 
                     //setup nlog
-                    var level = Environment.GetEnvironmentVariable("LOG_LEVEL").ToLower() ?? "info";
+                    var level = (Environment.GetEnvironmentVariable("LOG_LEVEL") ?? "info").ToLower();
                     LogLevel logLevel = NLogManager.GetLevel(level);
                     NLogManager.Configure(logLevel);
-
-                    //cronjob for check health
-                    services.AddQuartz(q =>
-                    {
-                        q.UseMicrosoftDependencyInjectionJobFactory();
-                        q.ScheduleJob<HealthJob>(trigger => trigger
-                            .StartNow()
-                            .WithDailyTimeIntervalSchedule(x => x.WithIntervalInSeconds(60)), job => job.WithIdentity("notify"));
-                        //q.AddJob<CronJob>(job => job.WithIdentity("update"));
-                    });
-                    services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
                     services.AddHostedService<Worker>();
                 });

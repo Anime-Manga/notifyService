@@ -14,16 +14,22 @@ example:
     USERNAME_RABBIT: "guest" #guest [default]
     PASSWORD_RABBIT: "guest" #guest [default]
     ADDRESS_RABBIT: "localhost" #localhost [default]
+    
+    #--- Webhook ---
+    WEBHOOK_DISCORD_BOOK: "url" [require]
+    WEBHOOK_DISCORD_BOOK_REQUEST: "url" [require]
+    WEBHOOK_DISCORD_VIDEO: "url" [require]
+    WEBHOOK_DISCORD_VIDEO_REQUEST: "url" [require]
 
-    #--- API ---
-    ADDRESS_API: "localhost" #localhost [default]
-    PORT_API: "33333" #5000 [default]
-    PROTOCOL_API: "http" or "https" #http [default]
+    #--- Bot Telegram ---
+    TOKEN_BOT: "token" [require]
+    CHAT_ID: "@channelusername" [require]
+    CHAT_ID_REQUEST: "@channelusername" [require]
     
-    #---Webhook---
-    WEBHOOK_DISCORD: "url" [require]
-    
-    #---logger---
+    #--- logger ---
     LOG_LEVEL: "Debug|Info|Error" #Info [default]
     WEBHOOK_DISCORD_DEBUG: "url" [not require]
+
+    #--- General ---
+    SELECT_SERVICE: "Discord|Telegram|Any"
 ```
