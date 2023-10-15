@@ -8,12 +8,12 @@ using System.Net;
 
 namespace Cesxhin.AnimeManga.Application.Notify
 {
-    public class NotifyDiscord : Notify<DiscordWebhookClient, NotifyDTO>
+    public class NotifyDiscord : Notify<DiscordWebhookClient, GenericNotify>
     {
         //nlog
         private readonly NLogConsole _logger = new(LogManager.GetCurrentClassLogger());
 
-        public override void SendNotify(DiscordWebhookClient discord, NotifyDTO notify, string token)
+        public override void SendNotify(DiscordWebhookClient discord, GenericNotify notify, string token)
         {
             if (notify.Image != null)
             {

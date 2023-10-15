@@ -7,12 +7,12 @@ using Telegram.Bot.Types;
 
 namespace Cesxhin.AnimeManga.Application.Notify
 {
-    public class NotifyTelegramChannel : Notify<TelegramBotClient, NotifyDTO>
+    public class NotifyTelegramChannel : Notify<TelegramBotClient, GenericNotify>
     {
         //nlog
         private readonly NLogConsole _logger = new(LogManager.GetCurrentClassLogger());
 
-        public override void SendNotify(TelegramBotClient bot, NotifyDTO notify, string chat_id)
+        public override void SendNotify(TelegramBotClient bot, GenericNotify notify, string chat_id)
         {
             if (notify.Image != null)
             {

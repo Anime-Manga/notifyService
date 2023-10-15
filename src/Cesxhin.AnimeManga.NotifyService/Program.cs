@@ -84,16 +84,16 @@ namespace Cesxhin.AnimeManga.NotifyService
                             if(selectService == "telegram" || selectService == "any")
                             {
                                 cfg.ReceiveEndpoint("notify-video", e => {
-                                    e.Consumer<NotifyTelegramConsumer>();
+                                    e.Consumer<NotifyVideoTelegramConsumer>();
                                 });
                                 cfg.ReceiveEndpoint("notify-book", e => {
-                                    e.Consumer<NotifyTelegramConsumer>();
+                                    e.Consumer<NotifyBookTelegramConsumer>();
                                 });
                                 cfg.ReceiveEndpoint("notify-request-video", e => {
-                                    e.Consumer<NotifyRequestTelegramConsumer>();
+                                    e.Consumer<NotifyRequestVideoTelegramConsumer>();
                                 });
                                 cfg.ReceiveEndpoint("notify-request-book", e => {
-                                    e.Consumer<NotifyRequestTelegramConsumer>();
+                                    e.Consumer<NotifyRequestBookTelegramConsumer>();
                                 });
                             }
 

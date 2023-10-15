@@ -9,16 +9,16 @@ using Telegram.Bot;
 
 namespace Cesxhin.AnimeManga.Application.Consumers
 {
-    public class NotifyRequestTelegramConsumer : IConsumer<NotifyDTO>
+    public class NotifyVideoTelegramConsumer : IConsumer<NotifyAnimeDTO>
     {
         //nlog
         private readonly NLogConsole _logger = new(LogManager.GetCurrentClassLogger());
 
         //settings for bot telegram
         private readonly string tokenBot = Environment.GetEnvironmentVariable("TOKEN_BOT");
-        private readonly string chat_id = Environment.GetEnvironmentVariable("CHAT_ID_REQUEST");
+        private readonly string chat_id = Environment.GetEnvironmentVariable("CHAT_ID");
 
-        public Task Consume(ConsumeContext<NotifyDTO> context)
+        public Task Consume(ConsumeContext<NotifyAnimeDTO> context)
         {
             var botTelegram = new TelegramBotClient(tokenBot);
             var managementNotify = new NotifyTelegramChannel();
@@ -26,7 +26,7 @@ namespace Cesxhin.AnimeManga.Application.Consumers
             var notify = context.Message;
             _logger.Info($"Recive this message: {context.MessageId}");
 
-            managementNotify.SendNotify(botTelegram, notify, chat_id);
+            managementNotify.SendNotify(botTelegram, GenericNotify.NotifyAnimeDTOToGenericNotify(notify), chat_id);
 
             return Task.CompletedTask;
         }
