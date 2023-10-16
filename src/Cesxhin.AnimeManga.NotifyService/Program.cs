@@ -1,5 +1,4 @@
 using Cesxhin.AnimeManga.Application.Consumers;
-using Cesxhin.AnimeManga.Modules.CronJob;
 using Cesxhin.AnimeManga.Modules.Generic;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
