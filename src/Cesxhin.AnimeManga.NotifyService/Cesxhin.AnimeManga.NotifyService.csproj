@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -9,11 +9,10 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.14" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="NLog" Version="5.1.3" />
-    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.4.0" />
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\references\Cesxhin.AnimeManga.Application\Cesxhin.AnimeManga.Application.csproj" />
+    <ProjectReference Include="..\references\Cesxhin.AnimeManga.Modules\Cesxhin.AnimeManga.Modules.csproj" />
+    <ProjectReference Include="..\Cesxhin.AnimeManga.Application\Cesxhin.AnimeManga.Application.csproj" />
   </ItemGroup>
 </Project>

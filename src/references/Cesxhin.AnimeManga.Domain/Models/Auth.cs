@@ -6,19 +6,23 @@ namespace Cesxhin.AnimeManga.Domain.Models
     [Map("account")]
     public class Auth
     {
-        [Identity]
+        [Primary]
         [Map("username")]
         public string Username { get; set; }
 
         [Map("password")]
         public string Password { get; set; }
 
+        [Map("role")]
+        public int Role { get; set; }
+
         //convert AuthDTO to Auth
         public static Auth AuthDTOToAuth(AuthDTO auth)
         {
             return new Auth
             {
-                Username = auth.Username
+                Username = auth.Username,
+                Role = auth.Role,
             };
         }
     }
